@@ -2,40 +2,96 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Tăng ca</title>
-
+  <title>Tăng ca tháng</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="data:image/jpeg;base64,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">
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #f4f6f9;
+    }
+
+    .card-stat {
+      border-left: 4px solid #0d6efd;
+    }
+
+    .table-responsive {
+      max-height: 65vh;
+    }
+
+    @media (max-width: 576px) {
+      h3 {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
 </head>
-<body class="p-4">
 
-<div class="container">
-  <h3 class="mb-3">Tăng ca tháng</h3>
+<body>
+<div class="container-fluid p-3 p-md-4">
 
-  <div class="row g-2 mb-3">
-    <div class="col-auto">
+  <!-- Header -->
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+<h3 id="pageTitle">📊 Tăng ca tháng</h3>
+
+    <div class="d-flex gap-2">
       <input type="date" id="dateInput" class="form-control">
-    </div>
-    <div class="col-auto">
-      <button id="loadBtn" class="btn btn-primary">Load</button>
+      <button id="loadBtn" class="btn btn-primary px-4">Load</button>
     </div>
   </div>
 
-  <table class="table table-bordered table-striped">
-    <thead>
-      <tr>
-        <th>Tháng</th>
-        <!-- <th>STT</th> -->
-        <th>Ngày</th>
-        <th>Time Out</th>
-        <th>thời gian</th>
-        <th>Tổng</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-  </table>
+  <!-- Stats -->
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-md-4">
+      <div class="card card-stat shadow-sm">
+        <div class="card-body">
+          <div class="text-muted">Số ngày tăng ca</div>
+          <h5 id="totalDays">0</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+      <div class="card card-stat shadow-sm">
+        <div class="card-body">
+          <div class="text-muted">Tổng thời gian</div>
+          <h5 id="totalTime">0</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+      <div class="card card-stat shadow-sm">
+        <div class="card-body">
+          <div class="text-muted">Số ngày làm</div>
+          <h5 id="totalSum">0</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered mb-0">
+          <thead class="table-light sticky-top">
+            <tr>
+              <th>Tháng</th>
+              <th>Ngày</th>
+              <th>Time Out</th>
+              <th>Thời gian</th>
+              <th>Tổng</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script src="data.js"></script>
