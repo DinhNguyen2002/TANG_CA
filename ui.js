@@ -98,7 +98,7 @@ function renderTable(data) {
   }).length;
   document.getElementById("totalDays").innerText = totalDaysOT;
 
-  // Tổng thời gian
+  // Tổng thời gian 
   document.getElementById("totalTime").innerText =
     filteredData.reduce((sum, r) => sum + Number(r.time || 0), 0);
 
