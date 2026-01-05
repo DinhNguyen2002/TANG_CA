@@ -133,6 +133,7 @@ const thisMonth = now.getMonth() + 1; // 1–12
 const thisYear = now.getFullYear();
 
 document.getElementById("pageTitle").innerText =
-  `📊 Tăng ca tháng ${String(thisMonth).padStart(2, "0")}/${thisYear}`;
+  `📊 LỊCH TĂNG CA ${String(thisMonth).padStart(2, "0")}/${thisYear}`;
+
 
 
