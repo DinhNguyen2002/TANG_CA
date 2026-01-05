@@ -79,16 +79,37 @@ function renderTable(data) {
   }
 
   // 3. Render table
+  // filteredData.forEach(r => {
+  //   const row = document.createElement("tr");
+  //   row.innerHTML = `
+  //     <td>${formatDate(r.date)}</td>
+  //     <td>${r.out ?? ""}</td>
+  //     <td>${r.time ?? 0}</td>
+  //     <td>${r.sum ?? ""}</td>
+  //   `;
+  //   tbody.appendChild(row);
+  // });
   filteredData.forEach(r => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${formatDate(r.date)}</td>
-      <td>${r.out ?? ""}</td>
-      <td>${r.time ?? 0}</td>
-      <td>${r.sum ?? ""}</td>
-    `;
-    tbody.appendChild(row);
-  });
+  const row = document.createElement("tr");
+
+  const out = Number(r.out);
+  let bg = "";
+
+  if (out === 0) bg = "#f8d7da";       // red
+  else if (out > 20) bg = "#d1e7dd";   // green
+  else if (out > 19) bg = "#cff4fc";   // blue
+  else if (out > 18) bg = "#fff3cd";   // yellow
+
+  row.innerHTML = `
+    <td style="background-color:${bg}">${formatDate(r.date)}</td>
+    <td style="background-color:${bg}">${r.out ?? ""}</td>
+    <td style="background-color:${bg}">${r.time ?? 0}</td>
+    <td style="background-color:${bg}">${r.sum ?? ""}</td>
+  `;
+
+  tbody.appendChild(row);
+});
+
 
   // ===== UPDATE STATS =====
 
@@ -133,6 +154,6 @@ const thisMonth = now.getMonth() + 1; // 1–12
 const thisYear = now.getFullYear();
 
 document.getElementById("pageTitle").innerText =
-  `📊 Tăng ca tháng ${String(thisMonth).padStart(2, "0")}/${thisYear}`;
+  `📊 LỊCH TĂNG CA THÁNG ${String(thisMonth).padStart(2, "0")}/${thisYear}`;
 
 
