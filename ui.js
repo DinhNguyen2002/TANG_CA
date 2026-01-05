@@ -49,7 +49,8 @@ function renderTable(data) {
   const tbody = document.getElementById("tableBody");
   tbody.innerHTML = "";
 
-  const now = new Date();
+  // const now = new Date();
+  const now = new Date(2025, 11, 31);
   const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();
   const today = now.getDate();
@@ -81,7 +82,6 @@ function renderTable(data) {
   filteredData.forEach(r => {
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td>${r.sheet}</td>
       <td>${formatDate(r.date)}</td>
       <td>${r.out ?? ""}</td>
       <td>${r.time ?? 0}</td>
@@ -127,7 +127,8 @@ document.getElementById("totalSum").innerText = totalWorkingDays.toFixed(2);
 
 
 
-const now = new Date();
+// const now = new Date();
+const now = new Date(2025, 11, 31);
 const thisMonth = now.getMonth() + 1; // 1–12
 const thisYear = now.getFullYear();
 
