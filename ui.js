@@ -56,14 +56,35 @@ function renderTable(data) {
   const today = now.getDate();
 
   // 1. Lọc: cùng tháng + cùng năm + ngày <= hôm nay
-  const filteredData = data.filter(r => {
-    const d = new Date(r.date);
-    return (
-      d.getMonth() === currentMonth &&
-      d.getFullYear() === currentYear &&
-      d.getDate() <= today
-    );
-  });
+  // const filteredData = data.filter(r => {
+  //   const d = new Date(r.date);
+  //   return (
+  //     d.getMonth() === currentMonth &&
+  //     d.getFullYear() === currentYear &&
+  //     d.getDate() <= today
+  //   );
+  // });
+  filteredData.forEach(r => {
+  const row = document.createElement("tr");
+
+  const out = Number(r.out);
+  let bg = "";
+
+  if (out === 0) bg = "#f8d7da";       // red
+  else if (out > 20) bg = "#d1e7dd";   // green
+  else if (out > 19) bg = "#cff4fc";   // blue
+  else if (out > 18) bg = "#fff3cd";   // yellow
+
+  row.innerHTML = `
+    <td style="background-color:${bg}">${formatDate(r.date)}</td>
+    <td style="background-color:${bg}">${r.out ?? ""}</td>
+    <td style="background-color:${bg}">${r.time ?? 0}</td>
+    <td style="background-color:${bg}">${r.sum ?? ""}</td>
+  `;
+
+  tbody.appendChild(row);
+});
+
 
   // 2. Sắp xếp: hôm nay → ngày 1
   filteredData.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -134,6 +155,7 @@ const thisYear = now.getFullYear();
 
 document.getElementById("pageTitle").innerText =
   `📊 LỊCH TĂNG CA ${String(thisMonth).padStart(2, "0")}/${thisYear}`;
+
 
 
 
