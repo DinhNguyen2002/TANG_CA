@@ -3,6 +3,8 @@ document.getElementById("loadBtn").addEventListener("click", load);
 // load lần đầu
 load();
 
+const now = new Date();
+
 async function load() {
   const date = document.getElementById("dateInput").value;
   const tbody = document.getElementById("tableBody");
@@ -26,7 +28,6 @@ function renderTable(data) {
   tbody.innerHTML = "";
 
   // ===== SET TODAY (TEST) =====
-  const now = new Date(); // 31/12/2025
   const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();
   const today = now.getDate();
@@ -102,7 +103,6 @@ function renderTable(data) {
 }
 
 // ===== TITLE =====
-const now = new Date(2025, 11, 31);
 const thisMonth = now.getMonth() + 1;
 const thisYear = now.getFullYear();
 
