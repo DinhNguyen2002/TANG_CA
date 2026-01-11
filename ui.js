@@ -26,7 +26,7 @@ function renderTable(data) {
   tbody.innerHTML = "";
 
   // ===== SET TODAY (TEST) =====
-  const now = new Date(2025, 11, 31); // 31/12/2025
+  const now = new Date(); // 31/12/2025
   const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();
   const today = now.getDate();
