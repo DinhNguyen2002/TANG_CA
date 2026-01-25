@@ -39,62 +39,63 @@
       <h3 id="pageTitle">📊 LỊCH TĂNG CA</h3>
 
       <div class="d-flex gap-2">
-  <select id="monthSelect" class="form-select">
-    <option value="">Tháng</option>
-    <option value="1">01</option>
-    <option value="2">02</option>
-    <option value="3">03</option>
-    <option value="4">04</option>
-    <option value="5">05</option>
-    <option value="6">06</option>
-    <option value="7">07</option>
-    <option value="8">08</option>
-    <option value="9">09</option>
-    <option value="10">10</option>
-    <option value="11">11</option>
-    <option value="12">12</option>
-  </select>
+        <select id="monthSelect" class="form-select">
+          <option value="">Tháng</option>
+          <option value="1">01</option>
+          <option value="2">02</option>
+          <option value="3">03</option>
+          <option value="4">04</option>
+          <option value="5">05</option>
+          <option value="6">06</option>
+          <option value="7">07</option>
+          <option value="8">08</option>
+          <option value="9">09</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+        </select>
 
-  <select id="yearSelect" class="form-select">
-    <option value="">Năm</option>
-  </select>
+        <select id="yearSelect" class="form-select">
+          <option value="">Năm</option>
+        </select>
 
-  <button id="loadBtn" class="btn btn-primary px-4">
-    Xem
-  </button>
-</div>
+        <button id="loadBtn" class="btn btn-primary px-4">
+          Xem
+        </button>
+      </div>
 
     </div>
 
     <!-- Stats -->
-   <div class="row g-3 mb-4">
-  <div class="col-12 col-sm-4">
-    <div class="card card-stat shadow-sm h-100">
-      <div class="card-body">
-        <div class="text-muted">Số ngày tăng ca</div>
-        <h5 id="totalDays">0</h5>
+    <div class="row g-3 mb-4">
+      <div class="col-4">
+        <div class="card card-stat shadow-sm h-100">
+          <div class="card-body">
+            <div class="text-muted">Số ngày tăng ca</div>
+            <h5 id="totalDays">0</h5>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="col-12 col-sm-4">
-    <div class="card card-stat shadow-sm h-100">
-      <div class="card-body">
-        <div class="text-muted">Tổng thời gian</div>
-        <h5 id="totalTime">0</h5>
+      <div class="col-4">
+        <div class="card card-stat shadow-sm h-100">
+          <div class="card-body">
+            <div class="text-muted">Tổng thời gian</div>
+            <h5 id="totalTime">0</h5>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="col-12 col-sm-4">
-    <div class="card card-stat shadow-sm h-100">
-      <div class="card-body">
-        <div class="text-muted">Số ngày làm</div>
-        <h5 id="totalSum">0</h5>
+      <div class="col-4">
+        <div class="card card-stat shadow-sm h-100">
+          <div class="card-body">
+            <div class="text-muted">Số ngày làm</div>
+            <h5 id="totalSum">0</h5>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+
 
 
     <!-- Table -->
