@@ -86,10 +86,7 @@ function formatDateWithDay(d) {
     0: { label: "CN", bg: "#dc3545" },
     1: { label: "T2", bg: "#ffc107" },
     2: { label: "T3", bg: "#f8a5c2" },
-    3: {
-      label: "T4",
-      bg: hour >= 6 && hour < 18 ? "#198754" : "#6c757d"
-    },
+    3: { label: "T4", bg: hour >= 6 && hour < 18 ? "#198754" : "#6c757d" },
     4: { label: "T5", bg: "#fd7e14" },
     5: { label: "T6", bg: "#0d6efd" },
     6: { label: "T7", bg: "#6f42c1" }
@@ -97,24 +94,9 @@ function formatDateWithDay(d) {
 
   const day = dayConfig[dayIndex];
 
-  return `
-    ${dateStr}
-    <span style="
-      display:inline-block;
-      min-width:28px;
-      text-align:center;
-      margin-left:6px;
-      padding:2px 6px;
-      border-radius:6px;
-      font-size:0.8em;
-      font-weight:600;
-      color:#fff;
-      background:${day.bg};
-    ">
-      ${day.label}
-    </span>
-  `;
+  return `${dateStr}<span style="display:inline-flex;align-items:center;justify-content:center;min-width:28px;margin-left:6px;padding:2px 6px;border-radius:6px;font-size:0.8em;font-weight:600;line-height:1;color:#fff;background:${day.bg};white-space:nowrap">${day.label}</span>`;
 }
+
 
 
 
