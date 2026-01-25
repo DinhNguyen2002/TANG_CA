@@ -70,6 +70,54 @@ function onFilter() {
 /* =========================
    UTILS
 ========================= */
+function formatDateWithDay(d) {
+  const date = new Date(d);
+
+  const dd = String(date.getDate()).padStart(2, "0");
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const yyyy = date.getFullYear();
+
+  const dateStr = `${dd}/${mm}/${yyyy}`;
+
+  const dayIndex = date.getDay(); // 0 = CN
+  const hour = date.getHours();
+
+  const dayConfig = {
+    0: { label: "CN", bg: "#dc3545" },
+    1: { label: "T2", bg: "#ffc107" },
+    2: { label: "T3", bg: "#f8a5c2" },
+    3: {
+      label: "T4",
+      bg: hour >= 6 && hour < 18 ? "#198754" : "#6c757d"
+    },
+    4: { label: "T5", bg: "#fd7e14" },
+    5: { label: "T6", bg: "#0d6efd" },
+    6: { label: "T7", bg: "#6f42c1" }
+  };
+
+  const day = dayConfig[dayIndex];
+
+  return `
+    ${dateStr}
+    <span style="
+      display:inline-block;
+      min-width:28px;
+      text-align:center;
+      margin-left:6px;
+      padding:2px 6px;
+      border-radius:6px;
+      font-size:0.8em;
+      font-weight:600;
+      color:#fff;
+      background:${day.bg};
+    ">
+      ${day.label}
+    </span>
+  `;
+}
+
+
+
 function formatDate(d) {
   return new Date(d).toLocaleDateString("vi-VN");
 }
@@ -77,6 +125,18 @@ function formatDate(d) {
 /* =========================
    RENDER TABLE
 ========================= */
+function formatHour(value) {
+  const n = Number(value);
+  if (isNaN(n) || n <= 0) return "";
+
+  const hours = Math.floor(n);
+  const minutes = Math.round((n - hours) * 60);
+
+  // luôn hiển thị đủ phút
+  return `${hours}h${String(minutes).padStart(2, "0")}`;
+}
+
+
 function renderTable(data) {
   const tbody = document.getElementById("tableBody");
   tbody.innerHTML = "";
@@ -122,10 +182,16 @@ function renderTable(data) {
     else if (out > 18) bg = "#fff3cd";
 
     row.innerHTML = `
-      <td style="background-color:${bg}">${formatDate(r.date)}</td>
-      <td style="background-color:${bg}">${r.out ?? ""}</td>
-      <td style="background-color:${bg}">${r.time ?? 0}</td>
-      <td style="background-color:${bg}">${r.sum ?? ""}</td>
+<td style="background-color:${bg}">${formatDateWithDay(r.date)}</td>
+<td style="background-color:${bg}">
+  ${Number(r.out) === 0 ? "Off" : (r.out != null ? formatHour(r.out) : "")}
+</td>
+<td style="background-color:${bg}">
+  ${r.time != null && r.time !== "" ? `${r.time}h` : ""}
+</td>
+<td style="background-color:${bg}">
+  ${r.sum != null && r.sum !== "" ? `${r.sum}h` : ""}
+</td>
     `;
     tbody.appendChild(row);
   });
