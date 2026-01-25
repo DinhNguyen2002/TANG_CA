@@ -1,48 +1,105 @@
-document.getElementById("loadBtn").addEventListener("click", load);
+/* =========================
+   INIT
+========================= */
+document.getElementById("loadBtn").addEventListener("click", onFilter);
 
-// load lần đầu
-load();
+load(); // load lần đầu
 
 const now = new Date();
 
-async function load() {
-  const date = document.getElementById("dateInput").value;
-  const tbody = document.getElementById("tableBody");
+/* =========================
+   READ MONTH / YEAR
+   - Local: ?m=12&y=2025
+   - Prod: /12/2025
+========================= */
+function getMonthYearFromUrl() {
+  const params = new URLSearchParams(location.search);
+  const m = parseInt(params.get("m"), 10);
+  const y = parseInt(params.get("y"), 10);
 
+  if (m >= 1 && m <= 12 && y >= 2000) {
+    return { month: m - 1, year: y };
+  }
+
+  const parts = location.pathname.split("/").filter(Boolean);
+  if (parts.length >= 2) {
+    const month = parseInt(parts.at(-2), 10);
+    const year = parseInt(parts.at(-1), 10);
+    if (month >= 1 && month <= 12 && year >= 2000) {
+      return { month: month - 1, year };
+    }
+  }
+
+  return {
+    month: now.getMonth(),
+    year: now.getFullYear()
+  };
+}
+
+/* =========================
+   LOAD DATA (ALWAYS FULL)
+========================= */
+async function load() {
+  const tbody = document.getElementById("tableBody");
   tbody.innerHTML = `<tr><td colspan="4">Loading...</td></tr>`;
 
   try {
-    const data = await getData(date);
+    const data = await getData(null); // ⚠️ luôn lấy full data
     renderTable(data);
+    syncSelectWithUrl();
   } catch (e) {
     tbody.innerHTML = `<tr><td colspan="4">Error loading data</td></tr>`;
   }
 }
 
+/* =========================
+   FILTER BUTTON
+========================= */
+function onFilter() {
+  const m = document.getElementById("monthSelect").value;
+  const y = document.getElementById("yearSelect").value;
+
+  if (!m || !y) {
+    alert("Vui lòng chọn tháng và năm");
+    return;
+  }
+
+  location.href = `${location.pathname}?m=${m}&y=${y}`;
+}
+
+/* =========================
+   UTILS
+========================= */
 function formatDate(d) {
   return new Date(d).toLocaleDateString("vi-VN");
 }
 
+/* =========================
+   RENDER TABLE
+========================= */
 function renderTable(data) {
   const tbody = document.getElementById("tableBody");
   tbody.innerHTML = "";
 
-  // ===== SET TODAY (TEST) =====
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
-  const today = now.getDate();
+  const { month, year } = getMonthYearFromUrl();
 
-  // ===== FILTER THIS MONTH =====
+  const isCurrentMonth =
+    month === now.getMonth() &&
+    year === now.getFullYear();
+
   const filteredData = data.filter(r => {
     const d = new Date(r.date);
-    return (
-      d.getMonth() === currentMonth &&
-      d.getFullYear() === currentYear &&
-      d.getDate() <= today
-    );
+
+    if (d.getMonth() !== month || d.getFullYear() !== year) return false;
+
+    // tháng hiện tại → chỉ lấy tới hôm nay
+    if (isCurrentMonth) {
+      return d.getDate() <= now.getDate();
+    }
+
+    return true;
   });
 
-  // sort: mới → cũ
   filteredData.sort((a, b) => new Date(b.date) - new Date(a.date));
 
   if (!filteredData.length) {
@@ -53,58 +110,73 @@ function renderTable(data) {
     return;
   }
 
-  // ===== RENDER TABLE + COLOR =====
+  /* ===== TABLE ===== */
   filteredData.forEach(r => {
     const row = document.createElement("tr");
-
     const out = Number(r.out);
     let bg = "";
 
-    if (out === 0) bg = "#f8d7da";       // red
-    else if (out > 20) bg = "#d1e7dd";   // green
-    else if (out > 19) bg = "#cff4fc";   // blue
-    else if (out > 18) bg = "#fff3cd";   // yellow
+    if (out === 0) bg = "#f8d7da";
+    else if (out > 20) bg = "#d1e7dd";
+    else if (out > 19) bg = "#cff4fc";
+    else if (out > 18) bg = "#fff3cd";
 
     row.innerHTML = `
-    <td style="background-color:${bg}">${formatDate(r.date)}</td>
-    <td style="background-color:${bg}">${r.out ?? ""}</td>
-    <td style="background-color:${bg}">${r.time ?? 0}</td>
-    <td style="background-color:${bg}">${r.sum ?? ""}</td>
-  `;
-
+      <td style="background-color:${bg}">${formatDate(r.date)}</td>
+      <td style="background-color:${bg}">${r.out ?? ""}</td>
+      <td style="background-color:${bg}">${r.time ?? 0}</td>
+      <td style="background-color:${bg}">${r.sum ?? ""}</td>
+    `;
     tbody.appendChild(row);
   });
 
-  // ===== STATS =====
+  /* ===== STATS ===== */
+  document.getElementById("totalDays").innerText =
+    filteredData.filter(r => Number(r.time) > 0).length;
 
-  // số ngày tăng ca (time > 0)
-  const totalDaysOT = filteredData.filter(r => Number(r.time) > 0).length;
-  document.getElementById("totalDays").innerText = totalDaysOT;
-
-  // tổng thời gian
   document.getElementById("totalTime").innerText =
-    filteredData.reduce((sum, r) => sum + Number(r.time || 0), 0);
+    filteredData.reduce((s, r) => s + Number(r.time || 0), 0);
 
-  // số ngày làm (logic đặc biệt)
   const totalWorkingDays = filteredData.reduce((sum, r) => {
-    const timeOut = Number(r.out);
-    if (isNaN(timeOut)) return sum;
-
-    if (timeOut >= 16.5) return sum + 1;
-
-    const denominator = timeOut - 8;
-    if (denominator <= 0) return sum;
-
-    return sum + 8 / denominator;
+    const t = Number(r.out);
+    if (isNaN(t)) return sum;
+    if (t >= 16.5) return sum + 1;
+    const d = t - 8;
+    if (d <= 0) return sum;
+    return sum + 8 / d;
   }, 0);
 
   document.getElementById("totalSum").innerText =
     totalWorkingDays.toFixed(2);
 }
 
-// ===== TITLE =====
-const thisMonth = now.getMonth() + 1;
-const thisYear = now.getFullYear();
+/* =========================
+   SELECT UI
+========================= */
+function syncSelectWithUrl() {
+  const { month, year } = getMonthYearFromUrl();
+  document.getElementById("monthSelect").value = month + 1;
+  document.getElementById("yearSelect").value = year;
+}
 
+/* =========================
+   INIT YEAR SELECT
+========================= */
+(function initYearSelect() {
+  const yearSelect = document.getElementById("yearSelect");
+  const currentYear = now.getFullYear();
+
+  for (let y = currentYear - 5; y <= currentYear + 1; y++) {
+    const opt = document.createElement("option");
+    opt.value = y;
+    opt.textContent = y;
+    yearSelect.appendChild(opt);
+  }
+})();
+
+/* =========================
+   TITLE
+========================= */
+const { month, year } = getMonthYearFromUrl();
 document.getElementById("pageTitle").innerText =
-  `📊 LỊCH TĂNG CA ${String(thisMonth).padStart(2, "0")}/${thisYear}`;
+  `📊 LỊCH TĂNG CA ${String(month + 1).padStart(2, "0")}/${year}`;
