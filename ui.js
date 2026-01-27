@@ -144,39 +144,46 @@ function renderTable(data) {
 
   filteredData.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  if (!filteredData.length) {
-    tbody.innerHTML = `<tr><td colspan="4">No data</td></tr>`;
-    document.getElementById("totalDays").innerText = 0;
-    document.getElementById("totalTime").innerText = 0;
-    document.getElementById("totalSum").innerText = 0;
-    return;
-  }
+filteredData.forEach(r => {
+  const row = document.createElement("tr");
 
-  /* ===== TABLE ===== */
-  filteredData.forEach(r => {
-    const row = document.createElement("tr");
-    const out = Number(r.out);
-    let bg = "";
+  const rawOut = r.out;
+  const out = rawOut !== "" && rawOut != null ? Number(rawOut) : null;
 
-    if (out === 0) bg = "#f8d7da";
-    else if (out > 20) bg = "#d1e7dd";
-    else if (out > 19) bg = "#cff4fc";
-    else if (out > 18) bg = "#fff3cd";
+  let bg = "";
 
-    row.innerHTML = `
-<td style="background-color:${bg}">${formatDateWithDay(r.date)}</td>
+  if (out === 0) bg = "#f8d7da";
+  else if (out > 20) bg = "#d1e7dd";
+  else if (out > 19) bg = "#cff4fc";
+  else if (out > 18) bg = "#fff3cd";
+
+  row.innerHTML = `
 <td style="background-color:${bg}">
-  ${Number(r.out) === 0 ? "Off" : (r.out != null ? formatHour(r.out) : "")}
+  ${formatDateWithDay(r.date)}
 </td>
+
+<td style="background-color:${bg}">
+  ${
+    out === null
+      ? ""
+      : out === 0
+        ? "Off"
+        : formatHour(out)
+  }
+</td>
+
 <td style="background-color:${bg}">
   ${r.time != null && r.time !== "" ? `${r.time}h` : ""}
 </td>
+
 <td style="background-color:${bg}">
   ${r.sum != null && r.sum !== "" ? `${r.sum}h` : ""}
 </td>
-    `;
-    tbody.appendChild(row);
-  });
+  `;
+
+  tbody.appendChild(row);
+});
+
 
   /* ===== STATS ===== */
   document.getElementById("totalDays").innerText =
